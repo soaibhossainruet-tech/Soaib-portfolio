@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    :root{--navy:#0b2a5c;--navy-dark:#081f47;--green:#22a559;--yellow:#f5a623;--red:#e5352b;--bg:#eef1f6;--card:#fff;--border:#e2e6ee;--text:#1c2b45;--muted:#6b7794;}
+    *{box-sizing:border-box;}body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);}
+    .header{background:linear-gradient(90deg,var(--navy-dark),var(--navy));color:#fff;padding:16px 28px;display:flex;align-items:center;justify-content:space-between;}
+    .header-left{display:flex;align-items:center;gap:14px;}.header-left .icon{font-size:34px;}.header-left h1{margin:0;font-size:22px;letter-spacing:1px;}.header-left p{margin:2px 0 0;font-size:12px;color:#c7d3ea;}
+    .header-right{text-align:right;font-size:12px;color:#dbe4f5;}
+    .wrap{padding:18px 22px;}
+    .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;}
+    .kpi{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 6px rgba(20,30,60,.06);}
+    .kpi:hover{box-shadow:0 4px 14px rgba(20,30,60,.10);transform:translateY(-1px);}
+    .kpi .icon-circle{width:44px;height:44px;min-width:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+    .kpi .icon-circle svg{width:24px;height:24px;}
+    .kpi .text{text-align:left;}.kpi .lbl{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.5px;}.kpi .val{font-size:26px;font-weight:800;margin-top:2px;}.kpi .sub{font-size:11px;color:var(--muted);margin-top:2px;}
+    .kpi.blue .val{color:var(--navy);}.kpi.green .val{color:var(--green);}.kpi.red .val{color:var(--red);}.kpi.yellow .val{color:var(--yellow);}
+    .icon-circle.blue-bg{background:#dbe6fb;color:var(--navy);}.icon-circle.green-bg{background:#d9f2e3;color:var(--green);}.icon-circle.red-bg{background:#fadbd8;color:var(--red);}.icon-circle.yellow-bg{background:#fdecc8;color:var(--yellow);}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+    .panel{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 2px 6px rgba(20,30,60,.06);display:flex;flex-direction:column;}
+    .panel h3{margin:0;background:var(--navy);color:#fff;font-size:12.5px;letter-spacing:.6px;padding:11px 16px;font-weight:700;}
+    .panel .body{padding:14px 16px;flex:1;display:flex;flex-direction:column;min-height:0;}
+    .chart-box{position:relative;width:100%;flex:1;height:260px;}
+    .table-scroll{flex:1;overflow:auto;max-height:330px;}
+    table{width:100%;border-collapse:collapse;font-size:12.5px;}
+    th{text-align:left;color:var(--muted);font-size:11px;border-bottom:2px solid var(--border);padding:8px 6px;}
+    td{padding:8px 6px;border-bottom:1px solid #f0f2f7;}
+    .status{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;display:inline-block;}
+    .status.active{background:#d9f2e3;color:#22a559;}.status.pending{background:#fdecc8;color:#e65100;}.status.completed{background:#dbe6fb;color:#1565c0;}.status.delayed{background:#fadbd8;color:#e5352b;}
+    .progress-bar{width:100%;height:8px;background:#eef0f5;border-radius:4px;overflow:hidden;}
+    .progress-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#22a559,#3fd07a);}
+    @media(max-width:900px){.kpi-row{grid-template-columns:repeat(2,1fr);}.grid2{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-left">
+      <span class="icon">🏗️</span>
+      <div>
+        <h1>CIVIL PROJECT TASK DASHBOARD</h1>
+        <p>AKIJ Resource Ltd. — Project Procurement Tracking</p>
+      </div>
+    </div>
+    <div class="header-right">📅 Data as of<br><span>31 Jul 2026</span></div>
+  </div>
+
+  <div class="wrap">
+    <div class="kpi-row">
+      <div class="kpi blue">
+        <div class="icon-circle blue-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg></div>
+        <div class="text"><div class="lbl">TOTAL PROJECTS</div><div class="val">12</div><div class="sub">3 new this quarter</div></div>
+      </div>
+      <div class="kpi green">
+        <div class="icon-circle green-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5 5-5.5"/></svg></div>
+        <div class="text"><div class="lbl">COMPLETED</div><div class="val">5</div><div class="sub">41.7% completion rate</div></div>
+      </div>
+      <div class="kpi yellow">
+        <div class="icon-circle yellow-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></div>
+        <div class="text"><div class="lbl">IN PROGRESS</div><div class="val">5</div><div class="sub">2 on schedule</div></div>
+      </div>
+      <div class="kpi red">
+        <div class="icon-circle red-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6"/><path d="M15 9l-6 6"/></svg></div>
+        <div class="text"><div class="lbl">DELAYED</div><div class="val">2</div><div class="sub">1 critical</div></div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="panel">
+        <h3>PROJECT STATUS OVERVIEW</h3>
+        <div class="body"><div class="chart-box"><canvas id="statusChart"></canvas></div></div>
+      </div>
+      <div class="panel">
+        <h3>BUDGET UTILIZATION</h3>
+        <div class="body"><div class="chart-box"><canvas id="budgetChart"></canvas></div></div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-bottom:16px;">
+      <h3>PROJECT TRACKER</h3>
+      <div class="body">
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Project</th><th>Vendor</th><th>Budget (৳)</th><th>Spent</th><th>Progress</th><th>ETA</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Rice Mill Extension - Phase 2</td><td>BuildTech BD</td><td>85,00,000</td><td>68,00,000</td><td><div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div></td><td>15 Sep 2026</td><td><span class="status active">Active</span></td></tr>
+              <tr><td>Warehouse Flooring</td><td>Concrete Solutions</td><td>32,00,000</td><td>32,00,000</td><td><div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div></td><td>-</td><td><span class="status completed">Completed</span></td></tr>
+              <tr><td>Office Renovation</td><td>InteriorPro</td><td>18,50,000</td><td>4,50,000</td><td><div class="progress-bar"><div class="progress-fill" style="width:24%"></div></div></td><td>10 Oct 2026</td><td><span class="status pending">Pending</span></td></tr>
+              <tr><td>Drainage System Upgrade</td><td>HydraWorks</td><td>45,00,000</td><td>45,00,000</td><td><div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div></td><td>-</td><td><span class="status completed">Completed</span></td></tr>
+              <tr><td>Silo Foundation Repair</td><td>BuildTech BD</td><td>28,00,000</td><td>18,00,000</td><td><div class="progress-bar"><div class="progress-fill" style="width:64%"></div></div></td><td>05 Sep 2026</td><td><span class="status active">Active</span></td></tr>
+              <tr><td>Loading Dock Expansion</td><td>BuildTech BD</td><td>55,00,000</td><td>55,00,000</td><td><div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div></td><td>-</td><td><span class="status completed">Completed</span></td></tr>
+              <tr><td>Water Treatment Plant</td><td>HydraWorks</td><td>72,00,000</td><td>48,00,000</td><td><div class="progress-bar"><div class="progress-fill" style="width:67%"></div></div></td><td>20 Aug 2026</td><td><span class="status delayed">Delayed</span></td></tr>
+              <tr><td>Canteen Building</td><td>InteriorPro</td><td>22,00,000</td><td>22,00,000</td><td><div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div></td><td>-</td><td><span class="status completed">Completed</span></td></tr>
+              <tr><td>Security Cabin Upgrade</td><td>Concrete Solutions</td><td>8,00,000</td><td>6,50,000</td><td><div class="progress-bar"><div class="progress-fill" style="width:81%"></div></div></td><td>12 Aug 2026</td><td><span class="status active">Active</span></td></tr>
+              <tr><td>Road Paving - Zone B</td><td>Concrete Solutions</td><td>35,00,000</td><td>35,00,000</td><td><div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div></td><td>-</td><td><span class="status completed">Completed</span></td></tr>
+              <tr><td>Generator Room Extension</td><td>BuildTech BD</td><td>15,00,000</td><td>9,00,000</td><td><div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div></td><td>30 Aug 2026</td><td><span class="status active">Active</span></td></tr>
+              <tr><td>Fire Safety Upgrade</td><td>HydraWorks</td><td>12,00,000</td><td>3,00,000</td><td><div class="progress-bar"><div class="progress-fill" style="width:25%"></div></div></td><td>15 Nov 2026</td><td><span class="status delayed">Delayed</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    new Chart(document.getElementById('statusChart'), {
+      type:'doughnut',
+      data:{labels:['Completed','In Progress','Delayed','Pending'],datasets:[{data:[5,5,2,1],backgroundColor:['#22a559','#f5a623','#e5352b','#6b7794'],borderWidth:0}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}}}
+    });
+    new Chart(document.getElementById('budgetChart'), {
+      type:'bar',
+      data:{labels:['Mill Ext.','Warehouse','Office','Drainage','Silo','Dock','Water','Canteen','Security','Road','Gen Room','Fire Safety'],
+        datasets:[{label:'Budget',data:[85,32,18.5,45,28,55,72,22,8,35,15,12],backgroundColor:'rgba(11,42,92,0.2)',borderColor:'#0b2a5c',borderWidth:1,borderRadius:4},
+          {label:'Spent',data:[68,32,4.5,45,18,55,48,22,6.5,35,9,3],backgroundColor:'#22a559',borderRadius:4}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{y:{beginAtZero:true,title:{display:true,text:'Amount (৳ Lakhs)'}}}}
+    });
+  </script>
+</body>
+</html>
