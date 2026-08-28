@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    :root{--navy:#0b2a5c;--navy-dark:#081f47;--green:#22a559;--yellow:#f5a623;--red:#e5352b;--bg:#eef1f6;--card:#fff;--border:#e2e6ee;--text:#1c2b45;--muted:#6b7794;}
+    *{box-sizing:border-box;}body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);}
+    .header{background:linear-gradient(90deg,var(--navy-dark),var(--navy));color:#fff;padding:16px 28px;display:flex;align-items:center;justify-content:space-between;}
+    .header-left{display:flex;align-items:center;gap:14px;}.header-left .icon{font-size:34px;}.header-left h1{margin:0;font-size:22px;letter-spacing:1px;}.header-left p{margin:2px 0 0;font-size:12px;color:#c7d3ea;}
+    .header-right{text-align:right;font-size:12px;color:#dbe4f5;}
+    .wrap{padding:18px 22px;}
+    .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;}
+    .kpi{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 6px rgba(20,30,60,.06);}
+    .kpi:hover{box-shadow:0 4px 14px rgba(20,30,60,.10);transform:translateY(-1px);}
+    .kpi .icon-circle{width:44px;height:44px;min-width:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+    .kpi .icon-circle svg{width:24px;height:24px;}
+    .kpi .text{text-align:left;}.kpi .lbl{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.5px;}.kpi .val{font-size:26px;font-weight:800;margin-top:2px;}.kpi .sub{font-size:11px;color:var(--muted);margin-top:2px;}
+    .kpi.blue .val{color:var(--navy);}.kpi.green .val{color:var(--green);}.kpi.red .val{color:var(--red);}.kpi.yellow .val{color:var(--yellow);}
+    .icon-circle.blue-bg{background:#dbe6fb;color:var(--navy);}.icon-circle.green-bg{background:#d9f2e3;color:var(--green);}.icon-circle.red-bg{background:#fadbd8;color:var(--red);}.icon-circle.yellow-bg{background:#fdecc8;color:var(--yellow);}
+    .pipeline{display:flex;gap:2px;margin-bottom:20px;}
+    .stage{flex:1;padding:16px;text-align:center;color:#fff;border-radius:8px;font-weight:700;}
+    .stage:nth-child(1){background:#081f47;}.stage:nth-child(2){background:#0b2a5c;}.stage:nth-child(3){background:#2d7dd2;}.stage:nth-child(4){background:#22a559;}.stage:nth-child(5){background:#f5a623;color:#1c2b45;}
+    .stage .num{font-size:28px;}.stage .lbl{font-size:11px;margin-top:4px;opacity:.85;}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+    .panel{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 2px 6px rgba(20,30,60,.06);display:flex;flex-direction:column;}
+    .panel h3{margin:0;background:var(--navy);color:#fff;font-size:12.5px;letter-spacing:.6px;padding:11px 16px;font-weight:700;}
+    .panel .body{padding:14px 16px;flex:1;display:flex;flex-direction:column;min-height:0;}
+    .chart-box{position:relative;width:100%;flex:1;height:260px;}
+    .table-scroll{flex:1;overflow:auto;max-height:330px;}
+    table{width:100%;border-collapse:collapse;font-size:12.5px;}
+    th{text-align:left;color:var(--muted);font-size:11px;border-bottom:2px solid var(--border);padding:8px 6px;}
+    td{padding:8px 6px;border-bottom:1px solid #f0f2f7;}
+    .status{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;display:inline-block;}
+    .status.draft{background:#eef0f5;color:#6b7794;}.status.pending{background:#fdecc8;color:#e65100;}.status.approved{background:#d9f2e3;color:#22a559;}.status.po{background:#dbe6fb;color:#1565c0;}.status.delivered{background:#d9f2e3;color:#22a559;}
+    @media(max-width:900px){.kpi-row{grid-template-columns:repeat(2,1fr);}.grid2{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-left">
+      <span class="icon">📋</span>
+      <div>
+        <h1>PROCUREMENT INTELLIGENCE DASHBOARD</h1>
+        <p>PR to PO Tracking — AKIJ Resource Ltd.</p>
+      </div>
+    </div>
+    <div class="header-right">📅 Reporting Period<br><span>Jul 2026</span></div>
+  </div>
+
+  <div class="wrap">
+    <div class="kpi-row">
+      <div class="kpi blue">
+        <div class="icon-circle blue-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        <div class="text"><div class="lbl">TOTAL PRs (JULY)</div><div class="val">47</div><div class="sub">+8 vs June</div></div>
+      </div>
+      <div class="kpi green">
+        <div class="icon-circle green-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+        <div class="text"><div class="lbl">POs ISSUED</div><div class="val">38</div><div class="sub">81% conversion rate</div></div>
+      </div>
+      <div class="kpi yellow">
+        <div class="icon-circle yellow-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></div>
+        <div class="text"><div class="lbl">AVG CYCLE TIME</div><div class="val">3.2 days</div><div class="sub">-0.8 days improved</div></div>
+      </div>
+      <div class="kpi red">
+        <div class="icon-circle red-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6"/><path d="M15 9l-6 6"/></svg></div>
+        <div class="text"><div class="lbl">PENDING APPROVALS</div><div class="val">6</div><div class="sub">2 overdue</div></div>
+      </div>
+    </div>
+
+    <div class="pipeline">
+      <div class="stage"><div class="num">6</div><div class="lbl">DRAFT</div></div>
+      <div class="stage"><div class="num">6</div><div class="lbl">PENDING</div></div>
+      <div class="stage"><div class="num">8</div><div class="lbl">APPROVED</div></div>
+      <div class="stage"><div class="num">15</div><div class="lbl">PO ISSUED</div></div>
+      <div class="stage"><div class="num">12</div><div class="lbl">DELIVERED</div></div>
+    </div>
+
+    <div class="grid2">
+      <div class="panel">
+        <h3>PR TO PO CONVERSION FUNNEL</h3>
+        <div class="body"><div class="chart-box"><canvas id="funnelChart"></canvas></div></div>
+      </div>
+      <div class="panel">
+        <h3>DEPARTMENT-WISE PR DISTRIBUTION</h3>
+        <div class="body"><div class="chart-box"><canvas id="deptChart"></canvas></div></div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-bottom:16px;">
+      <h3>PR-PO TRACKER</h3>
+      <div class="body">
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>PR No.</th><th>Department</th><th>Vendor</th><th>Amount (৳)</th><th>PR Date</th><th>PO Date</th><th>Cycle Days</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>PR-2026-0087</td><td>Production</td><td>Bangla Steel Ltd.</td><td>12,50,000</td><td>28 Jul</td><td>30 Jul</td><td>2</td><td><span class="status po">PO Issued</span></td></tr>
+              <tr><td>PR-2026-0086</td><td>Maintenance</td><td>AutoParts BD</td><td>3,80,000</td><td>26 Jul</td><td>29 Jul</td><td>3</td><td><span class="status approved">Approved</span></td></tr>
+              <tr><td>PR-2026-0085</td><td>Quality</td><td>LabTech Instruments</td><td>5,20,000</td><td>25 Jul</td><td>-</td><td>5</td><td><span class="status pending">Pending</span></td></tr>
+              <tr><td>PR-2026-0084</td><td>Warehouse</td><td>PackRight Solutions</td><td>8,90,000</td><td>24 Jul</td><td>25 Jul</td><td>1</td><td><span class="status po">PO Issued</span></td></tr>
+              <tr><td>PR-2026-0083</td><td>HR</td><td>OfficeEase BD</td><td>1,50,000</td><td>23 Jul</td><td>-</td><td>0</td><td><span class="status draft">Draft</span></td></tr>
+              <tr><td>PR-2026-0082</td><td>Production</td><td>Bangla Steel Ltd.</td><td>22,00,000</td><td>22 Jul</td><td>23 Jul</td><td>1</td><td><span class="status delivered">Delivered</span></td></tr>
+              <tr><td>PR-2026-0081</td><td>Maintenance</td><td>MechPro BD</td><td>6,75,000</td><td>21 Jul</td><td>24 Jul</td><td>3</td><td><span class="status po">PO Issued</span></td></tr>
+              <tr><td>PR-2026-0080</td><td>Quality</td><td>TestLab BD</td><td>2,80,000</td><td>20 Jul</td><td>22 Jul</td><td>2</td><td><span class="status delivered">Delivered</span></td></tr>
+              <tr><td>PR-2026-0079</td><td>Production</td><td>PackRight Solutions</td><td>15,40,000</td><td>19 Jul</td><td>20 Jul</td><td>1</td><td><span class="status delivered">Delivered</span></td></tr>
+              <tr><td>PR-2026-0078</td><td>Logistics</td><td>FleetCare BD</td><td>4,20,000</td><td>18 Jul</td><td>21 Jul</td><td>3</td><td><span class="status delivered">Delivered</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    new Chart(document.getElementById('funnelChart'), {
+      type:'bar',
+      data:{labels:['Total PRs','Pending Review','Approved','PO Issued','Delivered'],
+        datasets:[{data:[47,6,8,15,12],backgroundColor:['#0b2a5c','#f5a623','#2d7dd2','#22a559','#22a559'],borderRadius:4}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true},x:{grid:{display:false}}}}
+    });
+    new Chart(document.getElementById('deptChart'), {
+      type:'doughnut',
+      data:{labels:['Production','Maintenance','Quality','Warehouse','HR','Logistics'],
+        datasets:[{data:[18,10,8,6,3,2],backgroundColor:['#0b2a5c','#22a559','#f5a623','#2d7dd2','#00b3a4','#8e44ad'],borderWidth:0}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}}}
+    });
+  </script>
+</body>
+</html>
