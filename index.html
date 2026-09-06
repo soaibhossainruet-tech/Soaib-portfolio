@@ -53,11 +53,56 @@
   /* global cursor-follow spotlight, subtle premium touch */
   #cursor-glow{
     position:fixed;top:0;left:0;width:520px;height:520px;z-index:0;pointer-events:none;
-    background:radial-gradient(circle,rgba(201,138,75,0.06),rgba(107,139,168,0.04) 45%,transparent 72%);
-    transform:translate(-50%,-50%);will-change:transform;transition:opacity .4s ease;
+    background:
+      radial-gradient(circle,rgba(201,138,75,0.07),rgba(107,139,168,0.045) 45%,transparent 72%),
+      conic-gradient(from 0deg,rgba(107,139,168,0.05),transparent 25%,rgba(201,138,75,0.05) 50%,transparent 75%);
+    will-change:transform;transition:opacity .4s ease;
     opacity:0;
   }
   #cursor-glow.on{opacity:1;}
+
+  /* ---------- futuristic engineering cursor effect (overlay only — native pointer stays) ---------- */
+  #cursor-dot,#cursor-ring,#cursor-tag{display:none;}
+  html.cursorfx #cursor-dot,html.cursorfx #cursor-ring,html.cursorfx #cursor-tag{display:block;}
+
+  #cursor-dot{
+    position:fixed;top:0;left:0;width:4px;height:4px;border-radius:50%;
+    background:var(--copper);
+    box-shadow:0 0 5px rgba(201,138,75,0.9),0 0 12px rgba(201,138,75,0.5);
+    pointer-events:none;z-index:2001;will-change:transform;
+    transition:opacity .2s ease,background .25s ease,box-shadow .25s ease;
+  }
+  #cursor-ring{
+    position:fixed;top:0;left:0;width:34px;height:34px;
+    pointer-events:none;z-index:2000;will-change:transform,width,height;
+    transition:width .3s cubic-bezier(.22,.9,.32,1),height .3s cubic-bezier(.22,.9,.32,1),opacity .3s ease;
+  }
+  #cursor-ring::before{
+    content:'';position:absolute;inset:0;border:1px dashed rgba(201,138,75,0.38);
+    border-radius:50%;animation:cursorSpin 8s linear infinite;
+  }
+  .cr-corner{position:absolute;width:9px;height:9px;transition:border-color .3s ease;}
+  .cr-corner.tl{top:-1px;left:-1px;border-top:1px solid var(--copper);border-left:1px solid var(--copper);}
+  .cr-corner.tr{top:-1px;right:-1px;border-top:1px solid var(--copper);border-right:1px solid var(--copper);}
+  .cr-corner.bl{bottom:-1px;left:-1px;border-bottom:1px solid var(--copper);border-left:1px solid var(--copper);}
+  .cr-corner.br{bottom:-1px;right:-1px;border-bottom:1px solid var(--copper);border-right:1px solid var(--copper);}
+  @keyframes cursorSpin{to{transform:rotate(360deg);}}
+
+  #cursor-tag{
+    position:fixed;top:0;left:0;z-index:2000;pointer-events:none;
+    font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.5px;
+    color:var(--ink-dim);background:rgba(23,27,34,0.72);border:1px solid var(--line);
+    padding:3px 7px;white-space:nowrap;opacity:0;transition:opacity .25s ease,color .25s ease,border-color .25s ease;
+    backdrop-filter:blur(2px);
+  }
+  #cursor-tag.on{opacity:0.85;}
+
+  html.cursor-locked .cr-corner{border-color:var(--steel);}
+  html.cursor-locked #cursor-ring::before{border-color:rgba(107,139,168,0.5);animation-duration:3.5s;}
+  html.cursor-locked #cursor-tag{color:var(--steel);border-color:var(--steel);}
+  html.cursor-down #cursor-dot{background:var(--steel);box-shadow:0 0 5px rgba(107,139,168,0.9),0 0 12px rgba(107,139,168,0.5);}
+  html.cursor-down .cr-corner{border-color:var(--steel);}
+
 
   /* scroll-to-top control with circular progress */
   .to-top{
@@ -196,6 +241,7 @@
   .hero-tagline{
     max-width:56ch;font-size:1.02rem;color:var(--ink-dim);margin-top:22px;line-height:1.75;
     opacity:0;animation:fadeUp .7s ease both .46s;
+    text-align:justify;text-justify:inter-word;hyphens:none;-webkit-hyphens:none;word-break:normal;overflow-wrap:normal;
   }
   .hero-cta-row{display:flex;gap:14px;margin-top:38px;flex-wrap:wrap;opacity:0;animation:fadeUp .7s ease both .58s;}
   .btn{
@@ -284,7 +330,7 @@
   /* ---------- ABOUT ---------- */
   .about-grid{display:grid;grid-template-columns:1.15fr 0.85fr;gap:64px;align-items:start;}
   @media(max-width:880px){.about-grid{grid-template-columns:1fr;}}
-  .about-text p{color:var(--ink);font-size:.98rem;margin-bottom:16px;max-width:62ch;}
+  .about-text p{color:var(--ink);font-size:.98rem;margin-bottom:16px;max-width:62ch;text-align:justify;text-justify:inter-word;hyphens:none;-webkit-hyphens:none;word-break:normal;overflow-wrap:normal;}
   .about-text strong{color:var(--copper);font-weight:600;}
   .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);margin-top:36px;border:1px solid var(--line);}
   @media(max-width:600px){.stats-row{grid-template-columns:repeat(2,1fr);}}
@@ -363,7 +409,7 @@
   .proj-card:hover::after{opacity:1;}
   .proj-tag{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.4px;color:var(--steel);text-transform:uppercase;display:block;margin-bottom:12px;}
   .proj-card h3{font-family:'Space Grotesk',sans-serif;font-size:.98rem;font-weight:600;color:var(--paper);margin-bottom:8px;}
-  .proj-card p{font-size:.84rem;color:var(--ink-dim);line-height:1.65;}
+  .proj-card p{font-size:.84rem;color:var(--ink-dim);line-height:1.65;text-align:justify;text-justify:inter-word;hyphens:none;-webkit-hyphens:none;word-break:normal;overflow-wrap:normal;}
 
   .dash-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);}
   .dash-card{background:var(--surface);text-decoration:none;display:block;transition:background .2s,transform .25s;}
@@ -384,7 +430,7 @@
   .list-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);}
   .list-item{background:var(--surface);padding:24px;}
   .list-item h4{font-family:'Space Grotesk',sans-serif;font-size:.92rem;font-weight:600;color:var(--paper);margin-bottom:8px;}
-  .list-item p{font-size:.85rem;color:var(--ink-dim);line-height:1.6;}
+  .list-item p{font-size:.85rem;color:var(--ink-dim);line-height:1.6;text-align:justify;text-justify:inter-word;hyphens:none;-webkit-hyphens:none;word-break:normal;overflow-wrap:normal;}
   .list-item .credit{color:var(--steel);margin-top:6px;}
   .badge{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--copper);border:1px solid var(--line);padding:3px 10px;margin-top:12px;}
 
@@ -422,6 +468,12 @@
 <canvas id="fx-canvas"></canvas>
 <div class="scroll-progress" id="scrollProgress"></div>
 <div id="cursor-glow"></div>
+<div id="cursor-dot"></div>
+<div id="cursor-ring">
+  <span class="cr-corner tl"></span><span class="cr-corner tr"></span>
+  <span class="cr-corner bl"></span><span class="cr-corner br"></span>
+</div>
+<div id="cursor-tag"></div>
 
 <div class="to-top" id="toTop" title="Back to top">
   <svg viewBox="0 0 48 48" width="52" height="52">
@@ -982,22 +1034,95 @@
     tick();
   })();
 
-  // ---------- global cursor-follow spotlight ----------
+  // ---------- futuristic engineering cursor effect: dot + reticle + readout (native pointer untouched) ----------
   (function(){
     var glow = document.getElementById('cursor-glow');
-    if(!glow) return;
-    var raf = null, tx = 0, ty = 0;
-    window.addEventListener('pointermove', function(e){
-      tx = e.clientX; ty = e.clientY;
-      glow.classList.add('on');
-      if(!raf){
-        raf = requestAnimationFrame(function(){
-          glow.style.transform = 'translate(' + tx + 'px,' + ty + 'px) translate(-50%,-50%)';
-          raf = null;
-        });
-      }
+    var dot = document.getElementById('cursor-dot');
+    var ring = document.getElementById('cursor-ring');
+    var tag = document.getElementById('cursor-tag');
+    if(!glow || !dot || !ring || !tag) return;
+    if(!window.matchMedia || !window.matchMedia('(pointer: fine)').matches) return; // skip on touch
+
+    document.documentElement.classList.add('cursorfx');
+
+    var mx = -100, my = -100;               // raw pointer position
+    var rx = -100, ry = -100;                // ring's eased position
+    var gx = -100, gy = -100;                // glow's eased position (slower, ambient)
+    var locked = false, lockEl = null;
+
+    var LOCK_SELECTOR = 'a, button, .btn, .dash-card, .proj-card, .exp-card, ' +
+      '.contact-item, .nav-toggle, .to-top, .video-link, .mark, .p-node';
+
+    function labelFor(el){
+      var explicit = el.getAttribute('data-cursor-label');
+      if(explicit) return explicit;
+      var h = el.querySelector ? el.querySelector('h3,h4,b') : null;
+      if(h && h.textContent) return h.textContent.trim().slice(0, 22).toUpperCase();
+      var txt = (el.textContent || '').trim().replace(/\s+/g,' ');
+      return txt ? txt.slice(0, 22).toUpperCase() : 'TARGET';
+    }
+
+    function lockOn(el){
+      locked = true; lockEl = el;
+      document.documentElement.classList.add('cursor-locked');
+      tag.textContent = 'LOCK · ' + labelFor(el);
+    }
+    function lockOff(){
+      locked = false; lockEl = null;
+      document.documentElement.classList.remove('cursor-locked');
+    }
+
+    document.addEventListener('pointerover', function(e){
+      var el = e.target.closest ? e.target.closest(LOCK_SELECTOR) : null;
+      if(el) lockOn(el);
     }, { passive:true });
-    window.addEventListener('pointerleave', function(){ glow.classList.remove('on'); });
+    document.addEventListener('pointerout', function(e){
+      var toEl = e.relatedTarget && e.relatedTarget.closest ? e.relatedTarget.closest(LOCK_SELECTOR) : null;
+      if(lockEl && !toEl) lockOff();
+    }, { passive:true });
+    document.addEventListener('pointerdown', function(){ document.documentElement.classList.add('cursor-down'); }, { passive:true });
+    document.addEventListener('pointerup', function(){ document.documentElement.classList.remove('cursor-down'); }, { passive:true });
+
+    window.addEventListener('pointermove', function(e){
+      mx = e.clientX; my = e.clientY;
+      glow.classList.add('on');
+      dot.style.opacity = 1;
+      tag.classList.add('on');
+    }, { passive:true });
+    window.addEventListener('pointerleave', function(){
+      glow.classList.remove('on');
+      dot.style.opacity = 0;
+      ring.style.opacity = 0;
+      tag.classList.remove('on');
+    });
+    window.addEventListener('pointerenter', function(){ ring.style.opacity = 1; });
+
+    function frame(){
+      // dot: snaps instantly to the pointer, as a small engineering marker beside it
+      dot.style.transform = 'translate(' + mx + 'px,' + my + 'px) translate(6px,6px)';
+
+      if(locked && lockEl && document.body.contains(lockEl)){
+        var r = lockEl.getBoundingClientRect();
+        var pad = 8;
+        var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+        rx += (cx - rx) * 0.3; ry += (cy - ry) * 0.3;
+        ring.style.width = (r.width + pad * 2) + 'px';
+        ring.style.height = (r.height + pad * 2) + 'px';
+        ring.style.transform = 'translate(' + rx + 'px,' + ry + 'px) translate(-50%,-50%)';
+      } else {
+        rx += (mx - rx) * 0.25; ry += (my - ry) * 0.25;
+        ring.style.width = '34px'; ring.style.height = '34px';
+        ring.style.transform = 'translate(' + rx + 'px,' + ry + 'px) translate(-50%,-50%)';
+        tag.textContent = 'X:' + String(Math.round(mx)).padStart(4,'0') + ' Y:' + String(Math.round(my)).padStart(4,'0');
+      }
+      tag.style.transform = 'translate(' + (mx + 20) + 'px,' + (my + 18) + 'px)';
+
+      gx += (mx - gx) * 0.06; gy += (my - gy) * 0.06;
+      glow.style.transform = 'translate(' + gx + 'px,' + gy + 'px) translate(-50%,-50%)';
+
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
   })();
 
   // ---------- subtle 3D tilt on profile photo ----------
