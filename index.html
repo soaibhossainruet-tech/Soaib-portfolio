@@ -24,7 +24,9 @@
     --maxw:1180px;
   }
   *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;--scrollY:0;}
+  html{scroll-behavior:smooth;--scrollY:0;scrollbar-width:none;-ms-overflow-style:none;}
+  /* hide both scrollbars (vertical + horizontal) — scrolling still works */
+  html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none;}
   body{
     background:var(--bg);
     color:var(--ink);
@@ -182,7 +184,7 @@
 
   /* ---------- HERO ---------- */
   header{
-    min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+    min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;justify-content:center;
     padding:140px 0 80px;position:relative;overflow:hidden;
   }
   header::before{
@@ -199,7 +201,7 @@
     0%,100%{transform:translate(0,0) scale(1);}
     50%{transform:translate(-30px,40px) scale(1.08);}
   }
-  header .wrap{z-index:1;}
+  header .wrap{z-index:1;width:100%;}
   .eyebrow{
     font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--good);
     display:flex;align-items:center;gap:8px;margin-bottom:28px;
@@ -223,6 +225,7 @@
     color:var(--copper);margin-top:18px;font-weight:600;
     opacity:0;animation:fadeUp .7s ease both .34s;
     display:flex;align-items:center;min-height:1.6em;
+    transition:font-size .45s ease;
   }
   .hero-role .tw-text{
     background:linear-gradient(95deg,var(--copper) 0%,#e3ab6f 45%,var(--copper) 90%);
@@ -231,6 +234,8 @@
     animation:twShimmer 5s ease-in-out infinite;
     white-space:nowrap;
   }
+  /* long AI line: slightly tighter type so it always fits (same copper colour) */
+  .hero-role.is-ai{font-size:clamp(.88rem,1.75vw,1.18rem);}
   @keyframes twShimmer{0%{background-position:200% 0;}100%{background-position:-40% 0;}}
   .hero-role .tw-cursor{
     display:inline-block;width:2px;height:1.05em;margin-left:4px;background:var(--copper);
@@ -451,16 +456,65 @@
     .wrap,.nav-inner{padding:0 22px;}
     .nav-toggle{display:flex;}
     .nav-links{
-      position:fixed;top:64px;right:-100%;width:72%;height:calc(100vh - 64px);
+      position:fixed;top:64px;right:-100%;width:78%;height:calc(100vh - 64px);height:calc(100dvh - 64px);
       background:var(--bg);border-left:1px solid var(--line);
       flex-direction:column;align-items:flex-start;padding:36px 26px;gap:22px;
-      transition:right .3s;
+      transition:right .3s;overflow-y:auto;
     }
     .nav-links.active{right:0;}
-    header{padding:110px 0 50px;}
+    .nav-links a{font-size:15px;padding:6px 0;}
+    header{padding:110px 0 50px;min-height:100svh;}
     .section{padding:64px 0;}
     .about-grid{gap:36px;}
     .profile-frame img{height:300px;}
+    .hero-tagline{text-align:left;font-size:.98rem;max-width:100%;}
+    .sec-head{margin-bottom:34px;}
+    footer{padding:28px 0;font-size:9.5px;}
+  }
+
+  @media(max-width:560px){
+    .wrap,.nav-inner{padding:0 16px;}
+    .nav-inner{height:58px;}
+    .nav-links{top:58px;height:calc(100dvh - 58px);width:86%;padding:28px 22px;}
+    .mark-text{display:none;}
+    header{padding:96px 0 44px;}
+    .eyebrow{font-size:10.5px;margin-bottom:18px;}
+    .hero-name{font-size:clamp(2rem,9vw,4.6rem);max-width:100%;}
+    .hero-role{font-size:clamp(.82rem,3.6vw,1.4rem);margin-top:14px;min-height:1.5em;}
+    .hero-tagline{font-size:.92rem;line-height:1.7;margin-top:16px;}
+    .hero-cta-row{margin-top:28px;gap:10px;}
+    .btn{padding:12px 20px;font-size:12.5px;}
+    .section{padding:52px 0;}
+    .sec-title{font-size:1.5rem;}
+    .stat{padding:16px 14px;}
+    .stat-num{font-size:1.55rem;}
+    .stat-lbl{font-size:.7rem;}
+    .profile-frame img{height:260px;}
+    .dash-body{padding:18px;}
+    .contact-item{padding:18px 16px;}
+    .to-top{width:44px;height:44px;}
+    .to-top svg{width:44px;height:44px;}
+    .process{margin-top:48px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;
+      -webkit-mask-image:linear-gradient(to right,#000 86%,transparent 99%);
+      mask-image:linear-gradient(to right,#000 86%,transparent 99%);}
+    .p-step{scroll-snap-align:start;}
+    .p-node{padding:7px 12px;font-size:10px;}
+    .p-node b{font-size:12px;}
+    .p-arrow{padding:0 8px;}
+  }
+
+  @media(max-width:380px){
+    .hero-name{font-size:clamp(1.75rem,8.5vw,4.6rem);}
+    .hero-role{font-size:clamp(.72rem,3.4vw,1.4rem);}
+    .btn{padding:11px 16px;font-size:11.5px;}
+    .stat-num{font-size:1.4rem;}
+  }
+
+  /* desktop: wide-screen breathing room */
+  @media(min-width:1600px){
+    .wrap{max-width:1280px;}
+    header{padding:160px 0 100px;}
+    .section{padding:96px 0;}
   }
 </style>
 </head>
@@ -515,7 +569,7 @@
       <li><a href="#training">Training</a></li>
       <li><a href="#achievement">Achievement</a></li>
       <li><a href="#contact">Contact</a></li>
-      <li><a href="https://drive.google.com/file/d/1PXJenzPNCQQT45AR8cKCXyOJ1BLnGi7k/view?usp=sharing" target="_blank" class="cv">CV ↓</a></li>
+      <li><a href="https://drive.google.com/file/d/1dUtLBiOZlETTyJaxWpSdkr83RSMSsdH_/view?usp=sharing" target="_blank" class="cv">CV ↓</a></li>
     </ul>
   </div>
 </nav>
@@ -529,7 +583,7 @@
     <div class="hero-cta-row">
       <a href="#contact" class="btn btn-primary">Get in touch</a>
       <a href="#projects" class="btn btn-secondary">View projects</a>
-      <a href="https://drive.google.com/file/d/1yKW9uBJ7Iudta5iL2sahzgUfRvuGc42a/view?usp=sharing" target="_blank" class="btn btn-secondary">Download CV</a>
+      <a href="https://drive.google.com/file/d/1dUtLBiOZlETTyJaxWpSdkr83RSMSsdH_/view?usp=sharing" target="_blank" class="btn btn-secondary">Download CV</a>
     </div>
 
     <div class="process">
@@ -1003,22 +1057,27 @@
     var roles = [
       'Industrial & Production Engineer',
       'Operational Excellence Officer',
-      'Lean Manufacturing & TPM Specialist',
-      'Dashboard & Data Systems Builder'
+      'AI Analyst — OpenCode · ChatGPT · Claude · Gemini · DeepSeek',
+      'Dashboard & Data Systems Builder',
+      'Lean Manufacturing & TPM Specialist'
     ];
     var ri = 0, ci = 0, deleting = false;
     var TYPE_SPEED = 55, DELETE_SPEED = 30, HOLD = 1600, GAP = 400;
     function tick(){
       var current = roles[ri];
+      var isAI = current.indexOf('AI Analyst') === 0;
+      el.parentElement.classList.toggle('is-ai', isAI);
+      var hold = isAI ? 3000 : HOLD;          // let the long AI line breathe
+      var speed = isAI ? 42 : TYPE_SPEED;      // type it a touch faster
       if(!deleting){
         ci++;
         el.textContent = current.slice(0, ci);
         if(ci === current.length){
           deleting = true;
-          setTimeout(tick, HOLD);
+          setTimeout(tick, hold);
           return;
         }
-        setTimeout(tick, TYPE_SPEED);
+        setTimeout(tick, speed);
       } else {
         ci--;
         el.textContent = current.slice(0, ci);
@@ -1028,7 +1087,7 @@
           setTimeout(tick, GAP);
           return;
         }
-        setTimeout(tick, DELETE_SPEED);
+        setTimeout(tick, isAI ? 18 : DELETE_SPEED);
       }
     }
     tick();
